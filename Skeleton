@@ -1,0 +1,28 @@
+void Skeleton(Mat &src, Mat &dst)
+{
+	Mat temp;
+	bool flag;
+	temp = src.clone();
+	morphologyEx(temp, temp, MORPH_OPEN, Mat(), Point(-1, -1), 1);
+	dst = dst | src - temp;
+	while (1)
+	{
+		flag = false;
+		erode(src, src, Mat(), Point(-1, -1), 1);
+		temp = src.clone();
+		morphologyEx(temp, temp, MORPH_OPEN, Mat(), Point(-1, -1), 1);
+		dst = dst | src - temp;
+
+		for (int i = 0; i < src.rows; i++)
+		{
+			for (int j = 0; j < src.cols; j++)
+			{
+				flag = flag | src.at<uchar>(i, j);
+			}
+		}
+		if (flag == false)
+		{
+			break;
+		}
+	}
+}
